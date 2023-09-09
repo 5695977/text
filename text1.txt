@@ -1,0 +1,87 @@
+import java.util.Scanner;
+
+public class text1 {//加解密
+    public static void main(String[] args) {
+        System.out.println("请选择功能（0为加密，1为解密）");
+        Scanner sc = new Scanner(System.in);
+        int m = sc.nextInt();//输入功能选择
+        if (m==0){
+            encryption1();
+        }else if (m==1){
+            decrypt();
+        }else {
+            System.out.println("无效");
+        }
+
+    }
+    public static void encryption1(){//加密
+        System.out.println("请输入密码（每个字符为数字或者大小写字母，长度不能超过16）");
+        Scanner sc = new Scanner(System.in);
+        String password = sc.nextLine();//输入密码
+        if (password.length() <= 16) {//判断长度
+            char[] arr = password.toCharArray();
+            for (int i = 0; i < password.length(); i++) {
+                if (arr[i] <= '9' && arr[i] >= '0' || 'a' <= arr[i] && 'z' >= arr[i] || 'A' <= arr[i] && 'Z' >= arr[i]) {//判断密码信息是否合法
+                    if (i!=0) {
+                        arr[i] += 3;
+                    }
+                } else {
+                    System.out.println("非法字符");
+                    break;
+                }
+            }
+            String str =encryption2(arr,password);
+            System.out.println(str);
+        } else {
+            System.out.println("长度不符合要求");
+        }
+    }
+    public static  String encryption2(char[] arr,String password){//加密（头尾对调和翻转）
+        char a;
+        a = arr[0];
+        arr[0] = arr[password.length() - 1];
+        arr[password.length() - 1] = a;
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < arr.length; i++) {
+            sb.append(arr[i]);
+        }
+        sb.reverse();
+        String str = sb.toString();
+        return str;
+    }
+    public static void decrypt(){//解密
+        System.out.println("请输入密码（每个字符为数字或者大小写字母，长度不能超过16）");
+        Scanner sc = new Scanner(System.in);
+        String password = sc.nextLine();//密码
+        if (password.length() <= 16) {//长度判断
+            StringBuffer sb = new StringBuffer(password);
+            sb.reverse();//翻转
+            String str = sb.toString();
+            char[] arr = str.toCharArray();
+//对调
+            char a;
+            a = arr[0];
+            arr[0] = arr[password.length() - 1];
+            arr[password.length() - 1] = a;
+            for (int i = 0; i < arr.length; i++) {
+                if (i==0){
+                        if (arr[0] <= '9' && arr[0] >= '0' || 'a' <= arr[0] && 'z' >= arr[0] || 'A' <= arr[0] && 'Z' >= arr[0]) {}//判断解密后是否合法
+                        else {
+                            System.out.println("非法字符");
+                            break;
+                        }
+                }else {
+                        if (arr[i]-3 <= '9' && arr[i]-3 >= '0' || 'a' <= arr[i]-3 && 'z' >= arr[i]-3 || 'A' <= arr[i]-3 && 'Z' >= arr[i]-3) {//判断解密后是否合法
+                            arr[i]-=3;
+                        } else {
+                            System.out.println("非法字符");
+                            break;
+                        }
+                }
+            }
+            System.out.println(arr);
+        } else {
+            System.out.println("长度不符合要求");
+        }
+    }
+}
